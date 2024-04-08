@@ -1,0 +1,43 @@
+@model System.Collections.Generic.List<MovieCatalog.Models.Film>
+
+@{
+    ViewBag.Title = "Movies";
+    Layout = "_Layout";
+}
+
+
+  <div class="container mt-4"> 
+    <h1>Movie Catalog</h1>
+    <table id="movieTable" class="table table-striped table-bordered"> 
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Director</th>
+          <th>Release date</th>
+          <th>Categories</th> 
+        </tr>
+      </thead>
+      <tbody> 
+          @foreach (var movie in Model)
+          {
+          <tr>
+              <td><div>
+                  <a href="@Url.Action("Details", "Films", new { id = movie.Id })">
+                  @movie.Name
+                  </a>
+              </div>
+              </td>
+              <td>@movie.Director</td>
+              <td>@movie.Release.ToShortDateString()</td> 
+              
+              <td>
+                @foreach (var filmCategory in movie.FilmCategories)
+                {
+                  <span>@filmCategory.Category.Name</span>
+                }
+          </tr>
+          }
+      </tbody>
+    </table>
+  </div>
+
