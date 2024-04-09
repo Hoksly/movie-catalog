@@ -16,10 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <AdditionalFiles Include="Views\Films\Categories\Index.cshtml" />
     <AdditionalFiles Include="Views\Films\Create.cshtml" />
     <AdditionalFiles Include="Views\Films\Delete.cshtml" />
     <AdditionalFiles Include="Views\Films\Details.cshtml" />
