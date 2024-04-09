@@ -20,3 +20,43 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+
+.custom-multiselect {
+  position: relative;
+  /* For positioning the dropdown */
+  width: 250px;
+  border: 1px solid #ccc;
+}
+
+.selected-values {
+  padding: 5px;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #ccc;
+}
+
+.dropdown-menu-scrollable {
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.custom-multiselect.open .dropdown {
+  display: block;
+  /* Show dropdown when  'open' class is added */
+}
+
+.option {
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.option:hover {
+  background-color: #e0e0e0;
+}
+
+/* ... existing styles ... */
+
+.option-checkbox {
+  margin-right: 20%;
+  /* Adjust spacing as needed */
+}
