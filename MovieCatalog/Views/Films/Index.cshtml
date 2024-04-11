@@ -1,43 +1,84 @@
-@model System.Collections.Generic.List<MovieCatalog.Models.Film>
+@model ICollection<MovieCatalog.Models.Film>
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
 
-@{
-    ViewBag.Title = "Movies";
-    Layout = "_Layout";
-}
+<div class="container mt-4">
+  <h1 class="mb-4">Films</h1>
 
+  <input type="text" id="directorFilter" placeholder="Filter by director" class="form-control">
+  <input type="text" id="categoryFilter" placeholder="Filter by category" class="form-control">
+  <select id="sortOrder" class="form-control">
+    <option value="date_asc">Date Ascending</option>
+    <option value="date_desc">Date Descending</option>
+  </select>
 
-  <div class="container mt-4"> 
-    <h1>Movie Catalog</h1>
-    <table id="movieTable" class="table table-striped table-bordered"> 
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Director</th>
-          <th>Release date</th>
-          <th>Categories</th> 
-        </tr>
-      </thead>
-      <tbody> 
-          @foreach (var movie in Model)
-          {
-          <tr>
-              <td><div>
-                  <a href="@Url.Action("Details", "Films", new { id = movie.Id })">
-                  @movie.Name
-                  </a>
-              </div>
-              </td>
-              <td>@movie.Director</td>
-              <td>@movie.Release.ToShortDateString()</td> 
-              
-              <td>
-                @foreach (var filmCategory in movie.FilmCategories)
-                {
-                  <span>@filmCategory.Category.Name</span>
-                }
-          </tr>
-          }
-      </tbody>
-    </table>
-  </div>
+  <table id="filmsTable" class="table table-striped">
+    <thead>
+    <tr>
+      <th>Film Name</th>
+      <th>Director</th>
+      <th>Release Date</th>
+      <th>Categories</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var film in Model)
+    {
+    <tr>
+      <td>@film.Name</td>
+      <td class="director">@film.Director</td>
+      <td class="release">@film.Release.ToString("yyyy-MM-dd")</td>
+      <td class="category">
+        @foreach (var filmCategory in film.FilmCategories)
+        {
+          <a href="@Url.Action("Details", "Categories", new { id = filmCategory.Category.Id })">@filmCategory.Category.Name</a>
+        }
+      </td>
+    </tr>
+    }
+    </tbody>
+  </table>
+</div>
 
+<script>
+  $(document).ready(function(){
+    var filmsTable = $('#filmsTable');
+
+    $('#directorFilter').on('input', function() {
+      var directorFilter = $(this).val().toLowerCase();
+      filmsTable.find('tr:not(:first)').each(function() {
+        var director = $(this).find('.director').text().toLowerCase();
+        $(this).toggle(director.indexOf(directorFilter) > -1);
+      });
+    });
+
+    $('#categoryFilter').on('input', function() {
+      var categoryFilter = $(this).val().toLowerCase();
+      filmsTable.find('tr:not(:first)').each(function() {
+        var category = $(this).find('.category').text().toLowerCase();
+        $(this).toggle(category.indexOf(categoryFilter) > -1);
+      });
+    });
+
+    $('#sortOrder').on('change', function() {
+      var sortOrder = $(this).val();
+      var rows = filmsTable.find('tr').get();
+      rows.sort(function(a, b) {
+        var dateA = new Date($(a).find('.release').text());
+        var dateB = new Date($(b).find('.release').text());
+        if (sortOrder === 'date_asc') {
+          return dateA - dateB;
+        } else {
+          return dateB - dateA;
+        }
+      });
+
+      $.each(rows, function(index, row) {
+        filmsTable.append(row);
+      });
+    });
+  });
+</script>

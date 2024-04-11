@@ -26,8 +26,12 @@ namespace MovieCatalog.Controllers
             {
                 var parentCategoryViewModel = new CategoryViewModel(category);
                 parentCategoryViewModel.SubCategories = await getSubCategories(category.Id);
-                parentCategoryViewModel.calculateNestingLevel();
                 parentCategoryViewModels.Add(parentCategoryViewModel);
+            }
+            
+            foreach (var parentCategoryViewModel in parentCategoryViewModels)
+            {
+                parentCategoryViewModel.calculateNestingLevel();
             }
 
             return View(parentCategoryViewModels);
@@ -48,6 +52,32 @@ namespace MovieCatalog.Controllers
                 subCategories.Add(subCategory);
             }
             return subCategories;
+        }
+        
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var category = await _context.Categories
+                .Include(c => c.FilmCategories)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            var categoryViewModel = new CategoryViewModel(category);
+            categoryViewModel.SubCategories = await getSubCategories(category.Id);
+            categoryViewModel.Films = await _context.Films
+                .Include(f => f.FilmCategories)
+                .Where(f => f.FilmCategories.Any(fc => fc.CategoryId == category.Id))
+                .ToListAsync();
+            
+            return View(categoryViewModel);
         }
         
     
