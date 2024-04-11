@@ -1,0 +1,36 @@
+@model MovieCatalog.Models.CategoryViewModel
+
+<div class="card">
+    <div class="card-header" id="heading-@Model.Category.Id">
+        <h2 class="mb-0">
+            
+            @Html.ActionLink(Model.Category.Name, "Details" +
+                                                  "s", "Categories", new { id = Model.Category.Id }, new { @class = "btn btn-link" })
+            <a>Films in category: @Model.Category.FilmCategories?.Count()</a>
+            <a>Nesting level: @Model.NestingLevel</a>
+            
+            @if (Model.SubCategories.Any())
+            {
+            <button class="btn btn-link float-right" type="button" data-toggle="collapse" data-target="#collapse-@Model.Category.Id" aria-expanded="true" aria-controls="collapse-@Model.Category.Id">
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            }
+        </h2>
+    </div>
+
+    <div id="collapse-@Model.Category.Id" class="collapse" aria-labelledby="heading-@Model.Category.Id" data-parent="#accordionExample">
+        <div class="card-body">
+            @if (Model.SubCategories.Any())
+            {
+            <ul class="list-group">
+                <div id="accordionExample">
+                    @foreach (var category in Model.SubCategories)
+                    {
+                    @Html.Partial("_CategoryPartial", category)
+                    }
+                </div>
+            </ul>
+            }
+        </div>
+    </div>
+</div>
