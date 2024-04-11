@@ -1,18 +1,42 @@
-@model dynamic
-
-@{
-    Layout = null;
-}
-
-<!DOCTYPE html>
-
-<html>
+@model MovieCatalog.Models.CategoryViewModel
 <head>
-    <title>title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<div>
-      
-</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
-</html>
+
+<div class="container mt-4">
+    <h1 class="mb-4">@Model.Category.Name</h1>
+    <h2 class="mb-3">Films in Category:</h2>
+    <table class="table table-striped">
+        <tbody>
+        @foreach (var filmCategory in Model.Category.FilmCategories)
+        {
+        if (filmCategory != null && filmCategory.Film != null)
+        {
+        <tr>
+            <td>
+                <a href="@Url.Action("Details", "Films", new { id = filmCategory.FilmId })" class="btn btn-link">
+                    @filmCategory.Film.Name
+                </a>
+            </td>
+        </tr>
+        }
+        }
+        </tbody>
+    </table>
+    <h2 class="mt-5 mb-3">Subcategories:</h2>
+    <ul class="list-group">
+        @foreach (var subCategory in Model.SubCategories)
+        {
+        <li class="list-group-item">
+            <a href="@Url.Action("Details", "Categories", new { id = subCategory.Category.Id })" class="btn btn-link">
+                @subCategory.Category.Name
+            </a>
+        </li>
+        }
+    </ul>
+</div>

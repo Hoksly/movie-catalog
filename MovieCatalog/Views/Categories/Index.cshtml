@@ -24,10 +24,19 @@
 </head>
 <div class="container mt-4">
     <h1>Category Catalog</h1>
-    <ul class="list-group">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Films in Category</th>
+            <th>Nesting Level</th>
+        </tr>
+        </thead>
+        <tbody>
         @foreach (var category in Model)
         {
-        @Html.Partial("_CategoryPartial", category)
+            @Html.Partial("_CategoryPartial", category)
         }
-    </ul>
+        </tbody>
+    </table>
 </div>
